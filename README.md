@@ -1,46 +1,52 @@
-# DBMS Laboratory Manual Submission
+# ER Diagram Workshop – Submission Template
 
-## 🎓 Course: 19CS404 Database Management System and its Applications  
-## 🧑‍🏫 Instructor: Ms. G Abinaya 
+# Scenario B: City Library Event & Book Lending System
 
-![image](https://github.com/user-attachments/assets/7e6f9751-b530-4526-9a3d-8e322e3b2e6d)
+**Business Context:**  
+The Central Library wants to manage book lending and cultural events.
 
-### 📝 Instructions for Students
+**Requirements:**  
+- Members borrow books, with loan and return dates tracked.  
+- Each book has title, author, and category.  
+- Library organizes events; members can register.  
+- Each event has one or more speakers/authors.  
+- Rooms are booked for events and study.  
+- Overdue fines apply for late returns.
 
-1. Fork this repository to your GitHub profile.
-2. For each experiment:
-   SQL queries based on questions generated randomly from Moodle.
-   - Complete the question on Moodle.
-   - Each experiment folder contains **two Markdown files**
-     1. `README.md`
+### ER Diagram:
+<img width="987" height="755" alt="image" src="https://github.com/user-attachments/assets/3e42c3a7-992e-4fab-891a-2eb52751bcab" />
 
-        This file contains:
-         - 🎯 **Aim**
-         - 📚 **Theory**
-         - 📝 **Result**
-        
-        You **do not need to edit** this file unless instructed.
-      3. `output.md`
 
-         You **must update this file** with your answers and outputs.
-         For each of the 10 Moodle-generated questions:
-         - Paste the **question**
-         - Write the **SQL query** inside the code block
-         - Paste a **screenshot or terminal output** below it
-3. Commit and push your changes.
-4. Create a pull request to the original repository
+### Entities and Attributes
+| Entity  | Attributes (PK, FK)                                                        | Notes                                |
+| ------- | -------------------------------------------------------------------------- | ------------------------------------ |
+| MEMBER  | **MemberID (PK)**, Name, Email, Phone                                      | Stores member details                |
+| BOOK    | **BookID (PK)**, Title, Author, Category, Availability                     | Stores book information              |
+| LOAN    | **LoanID (PK)**, LoanDate, DueDate, ReturnDate, MemberID (FK), BookID (FK) | Records borrowed books               |
+| FINE    | **FineID (PK)**, Amount, PaidStatus, LoanID (FK)                           | Stores fine details for late returns |
+| EVENT   | **EventID (PK)**, EventName, EventDate, Capacity                           | Stores library event details         |
+| ROOM    | **RoomID (PK)**, RoomName, Capacity                                        | Stores room information for events   |
+| SPEAKER | **SpeakerID (PK)**, Name, Expertise                                        | Stores speaker details               |
 
-### ✅ Experiments List
 
-| Exp No | Title                          | Module Based? |
-|--------|--------------------------------|---------------|
-| 1      | ER Diagram                     | No            |
-| 2      | DDL Commands                   | Yes           |
-| 3      | DML Commands                   | Yes           |
-| 4      | Aggregate, GROUP BY, HAVING   | Yes           |
-| 5      | Subqueries and Views          | Yes           |
-| 6      | Joins                         | Yes           |
-| 7      | Pl/sql                        | No            |
-| 8      | Procedures, Functions         | No            |
-| 9      | Cursors, Exception Handling   | No            |
-| 10     | Triggers                      | No            |
+### Relationships and Constraints
+| Relationship                       | Cardinality                                    | Participation   | Notes                                                                   |
+| ---------------------------------- | ---------------------------------------------- | --------------- | ----------------------------------------------------------------------- |
+| Borrows (MEMBER–BOOK through LOAN) | One Member → Many Loans, One Book → Many Loans | Partial         | A member can borrow many books; each loan links one member and one book |
+| Incurs (LOAN–FINE)                 | One Loan → Zero or One Fine                    | Partial         | Fine is incurred only for overdue loans                                 |
+| Registers (MEMBER–EVENT)           | Many Members ↔ Many Events                     | Partial         | Members can register for multiple events                                |
+| Hosts (EVENT–ROOM)                 | Many Events → One Room                         | Total for Event | Each event is hosted in a room                                          |
+| Speaks at (SPEAKER–EVENT)          | Many Speakers ↔ Many Events                    | Partial         | A speaker may speak at many events                                      |
+| Features (EVENT–SPEAKER)           | Many-to-Many                                   | Partial         | Events may feature multiple speakers                                    |
+
+
+### Assumptions
+1.A member can borrow multiple books, but each loan record refers to one member and one book.
+
+2.A fine is generated only if a loan exceeds the due date.
+
+3.Members may register for multiple events, and events can have many members.
+
+4.Each event is hosted in one room, but a room may host multiple events at different times.
+
+5.A speaker can participate in multiple events, and an event may include multiple speakers.
